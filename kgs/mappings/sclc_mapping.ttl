@@ -1,0 +1,56 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix kg: <http://causalkg.example.org/sclc/> .
+
+<#SCLCPatientMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "kgs/csvs/SCLC_patients.csv" ;
+        rml:referenceFormulation ql:CSV
+    ] ;
+    rr:subjectMap [
+        rr:template "http://causalkg.example.org/sclc/patient/patient_{index}" ;
+        rr:class kg:SCLCPatient
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:ageGroup ; 
+        rr:objectMap [ rml:reference "Age" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:gender ; 
+        rr:objectMap [ rml:reference "Gender" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:smokerType ; 
+        rr:objectMap [ rml:reference "SmokerType" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:familyCancer ; 
+        rr:objectMap [ rml:reference "FamilyCancer" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:biomarker ; 
+        rr:objectMap [ rml:reference "Biomarker" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:episodeType ; 
+        rr:objectMap [ rml:reference "EpisodeType" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:relapseStatus ; 
+        rr:objectMap [ rml:reference "Relapse" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:locatedIn ; 
+        rr:objectMap [ rml:reference "LocatedIn" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:stage ; 
+        rr:objectMap [ rml:reference "Stage" ] 
+    ] ;
+    rr:predicateObjectMap [ 
+        rr:predicate kg:familyGender ; 
+        rr:objectMap [ rml:reference "FamilyGender" ] 
+    ] .

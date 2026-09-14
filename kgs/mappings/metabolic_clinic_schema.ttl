@@ -1,0 +1,73 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix kg: <http://causalkg.example.org/clinic/> .
+
+### Class Definition ###
+
+kg:ClinicPatient a owl:Class ;
+    rdfs:label "Clinic Patient" ;
+    rdfs:comment "A patient of the metabolic clinic cohort with demographic, lifestyle, anthropometric and cardiometabolic measurements." .
+
+### Property Definitions ###
+
+kg:ageGroup a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:string ;
+    rdfs:label "Age Group" ;
+    rdfs:comment "Categorisation of the patient's age: YOUNG (<40), MIDDLE (40-59), OLDER (60+)." .
+
+kg:sex a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:string ;
+    rdfs:label "Sex" ;
+    rdfs:comment "Biological sex of the patient (Female/Male)." .
+
+kg:smokerType a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:string ;
+    rdfs:label "Smoker Type" ;
+    rdfs:comment "Smoking status of the patient (Never/Former/Current)." .
+
+kg:activityLevel a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:string ;
+    rdfs:label "Activity Level" ;
+    rdfs:comment "Self-reported physical activity level (Sedentary/Moderate/Vigorous)." .
+
+kg:bmi a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:float ;
+    rdfs:label "Body Mass Index" ;
+    rdfs:comment "Body mass index in kg/m^2." .
+
+kg:fastingGlucose a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:float ;
+    rdfs:label "Fasting Glucose" ;
+    rdfs:comment "Fasting blood glucose in mg/dL." .
+
+kg:systolicBP a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:float ;
+    rdfs:label "Systolic Blood Pressure" ;
+    rdfs:comment "Systolic blood pressure in mmHg." .
+
+kg:cholesterol a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:float ;
+    rdfs:label "Total Cholesterol" ;
+    rdfs:comment "Total serum cholesterol in mg/dL." .
+
+kg:hypertension a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:string ;
+    rdfs:label "Hypertension Diagnosis" ;
+    rdfs:comment "Clinical hypertension diagnosis (No/Yes)." .
+
+kg:diabetesStatus a owl:DatatypeProperty ;
+    rdfs:domain kg:ClinicPatient ;
+    rdfs:range xsd:string ;
+    rdfs:label "Diabetes Status" ;
+    rdfs:comment "Glycaemic status of the patient (No/Prediabetes/Diabetes)." .

@@ -1,0 +1,56 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix kg: <http://causalkg.example.org/vsc/> .
+
+<#VSCSampleMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "kgs/csvs/VSC.csv" ;
+        rml:referenceFormulation ql:CSV
+    ] ;
+    rr:subjectMap [
+        rr:template "http://causalkg.example.org/vsc/sample_{index}" ;
+        rr:class kg:VSCSample
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:sample ;
+        rr:objectMap [ rml:reference "Sample" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:dbx2 ;
+        rr:objectMap [ rml:reference "Dbx2" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:irx3 ;
+        rr:objectMap [ rml:reference "Irx3" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:nkx22 ;
+        rr:objectMap [ rml:reference "Nkx22" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:nkx61 ;
+        rr:objectMap [ rml:reference "Nkx61" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:nkx62 ;
+        rr:objectMap [ rml:reference "Nkx62" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:olig2 ;
+        rr:objectMap [ rml:reference "Olig2" ;
+        rr:datatype xsd:float]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate kg:pax6 ;
+        rr:objectMap [ rml:reference "Pax6" ;
+        rr:datatype xsd:float]
+    ] .

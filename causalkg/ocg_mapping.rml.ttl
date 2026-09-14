@@ -1,0 +1,399 @@
+# RML mapping: OntologicalCausalGraph JSON -> ckg: RDF.
+#
+# This file *is* the specification of how an OCG becomes triples.  Nothing in
+# `causalkg/result.py` adds a triple of its own; `to_rdf` writes the JSON that
+# `to_json` produced, hands this mapping to SDM-RDFizer, and parses the result
+# back.  Change the shape of the exported graph here, not in Python.
+#
+# Every logical source reads the *same* document (`ocg.json`, resolved relative
+# to the process working directory — SDM-RDFizer does not resolve it against
+# the config's `main_directory`) under a different JSONPath iterator.  The JSON
+# is deliberately denormalised: each record carries every field its triples
+# map needs, so no triples map uses `rr:parentTriplesMap`.  That is not a
+# stylistic choice — SDM-RDFizer 4.7.5 emits a malformed IRI where a join onto
+# a blank-node parent should go, and drops all but the last matching row.
+#
+# Three further constraints of that engine are baked into the shapes below.
+#
+#   1. Carrying an IRI through takes a *different* idiom on each side of the
+#      triple, and they are exact opposites.  Verified against SDM-RDFizer
+#      4.7.5; do not "make them consistent".
+#
+#        | position | rr:template "{f}"             | rml:reference "f" (+ rr:IRI) |
+#        |----------|-------------------------------|------------------------------|
+#        | subject  | percent-encoded, re-based to  | **verbatim**                 |
+#        |          | http://example.com/base/      |                              |
+#        | object   | **verbatim**                  | percent-encoded              |
+#
+#      So every subject template here spells out its IRI stem literally and
+#      interpolates only slug-safe key fragments, while a foreign IRI (a domain
+#      class, a property, an object property) travels as an *object*
+#      `rr:template "{field}"` + `rr:termType rr:IRI`.  A foreign IRI in
+#      *subject* position needs `rml:reference` + `rr:termType rr:IRI` instead
+#      — see `<#EntityHasQueryMap>` in `cf_mapping.rml.ttl`, the only place
+#      this project needs it.
+#
+#   2. There is no working collection support (`rml:gather` / `rml:gatherAs`
+#      is parsed and silently produces nothing), so the ordered node layout of
+#      the adjacency matrix cannot be an `rdf:List`.  It is a set of
+#      `ckg:NodeSlot` resources carrying an explicit `ckg:slotIndex` instead.
+#      `OntologicalCausalGraph.from_rdf` still reads the legacy `ckg:nodeList`
+#      when it finds one, so Turtle written before this change keeps loading.
+#
+#   3. A literal produced through `rml:reference` has both `"` and `'`
+#      rewritten to `\'`, irreversibly.  That is why the discovery run's
+#      hyper-parameters are `ckg:Parameter` resources with a name, a value and
+#      a kind rather than one `ckg:parameters` JSON literal — a JSON object is
+#      *always* full of double quotes.  `to_rdf` refuses to export any other
+#      literal containing a quote rather than write a corrupted one.
+#
+# Absent JSON keys yield no triple, which is how optional provenance
+# (`ckg:method`, `ckg:usedTopologicalConstraint`, `ckg:sourceKG`,
+# `ckg:manuallyAdded`) is expressed: `to_json` omits the key rather than
+# emitting null.  Note that an *empty* reference value is not treated as
+# absent — the engine writes the literal "None" — which is why `to_json` drops
+# the key entirely instead of setting it to "".
+#
+# Two facts are deliberately written once rather than in the two places that
+# would be convenient:
+#
+#   * `ckg:method` and `ckg:usedTopologicalConstraint` describe the *run*.  A
+#     graph reaches them through `prov:wasGeneratedBy`; they are not repeated
+#     onto the graph (the old `ckg:constrained` did exactly that).
+#   * An edge's ordered, directed relation label is one `ckg:viaPath` literal in
+#     SPARQL 1.1 property-path syntax (`^<a>/<b>`), not a `ckg:RelationPath`
+#     resource with `ckg:RelationHop` children.  The `^` and `/` operators carry
+#     the direction and the order, so the seven terms that reified them said
+#     nothing the standard syntax does not.  The unordered set of relations
+#     stays under `ckg:viaRelation` for querying.
+
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix ckg:  <http://sdm-causalkg.org/> .
+
+
+# ------------------------------------------------------------------ #
+# The graph instance
+# ------------------------------------------------------------------ #
+<#GraphMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.graph[*]"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://sdm-causalkg.org/graph/{gid}" ;
+        rr:class ckg:OntologicalCausalGraph , prov:Entity
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rml:reference "label" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:nodeCount ;
+        rr:objectMap [ rml:reference "node_count" ; rr:datatype xsd:integer ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:edgeCount ;
+        rr:objectMap [ rml:reference "edge_count" ; rr:datatype xsd:integer ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate prov:wasGeneratedBy ;
+        rr:objectMap [ rr:template "{run_iri}" ; rr:termType rr:IRI ]
+    ] .
+
+# What a *curated* graph was assembled from: the contributing discovery runs.
+# Its own iterator because a graph has 0..n of them.
+<#GraphDerivedFromMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.derivations[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/graph/{gid}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate prov:wasDerivedFrom ;
+        rr:objectMap [ rr:template "{derived_from}" ; rr:termType rr:IRI ]
+    ] .
+
+
+# ------------------------------------------------------------------ #
+# The discovery run that produced it
+# ------------------------------------------------------------------ #
+<#RunMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.run[*]"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://sdm-causalkg.org/run/{gid}" ;
+        rr:class ckg:DiscoveryRun , prov:Activity
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rml:reference "label" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:method ;
+        rr:objectMap [ rml:reference "method" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:usedTopologicalConstraint ;
+        rr:objectMap [ rml:reference "constrained" ; rr:datatype xsd:boolean ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:sourceKG ;
+        rr:objectMap [ rml:reference "source" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate prov:used ;
+        rr:objectMap [ rml:reference "source" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate prov:endedAtTime ;
+        rr:objectMap [ rml:reference "created_at" ; rr:datatype xsd:dateTime ]
+    ] .
+
+
+# ------------------------------------------------------------------ #
+# The run's hyper-parameters, one resource per entry.  `kind` is what lets
+# `from_rdf` put an int back as an int: the value itself is carried as text
+# because RML fixes a datatype per predicate-object map, not per record.
+# ------------------------------------------------------------------ #
+<#ParameterMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.parameters[*]"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://sdm-causalkg.org/run/{gid}/parameter/{param_key}" ;
+        rr:class ckg:Parameter
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:parameterName ;
+        rr:objectMap [ rml:reference "name" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:parameterValue ;
+        rr:objectMap [ rml:reference "value" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:parameterKind ;
+        rr:objectMap [ rml:reference "kind" ]
+    ] .
+
+<#RunHasParameterMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.parameters[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/run/{gid}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:hasParameter ;
+        rr:objectMap [ rr:template "{parameter_iri}" ; rr:termType rr:IRI ]
+    ] .
+
+
+# ------------------------------------------------------------------ #
+# The property nodes (D_p, p, R_p).  Node IRIs are global — the same node
+# resource is shared by every graph discovered over the same schema — so the
+# subject stem is `node/`, not `graph/{gid}/`.
+# ------------------------------------------------------------------ #
+<#NodeMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.nodes[*]"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://sdm-causalkg.org/node/{node_key}" ;
+        rr:class ckg:PropertyNode
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rml:reference "label" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:domain ;
+        rr:objectMap [ rr:template "{domain}" ; rr:termType rr:IRI ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:property ;
+        rr:objectMap [ rr:template "{property}" ; rr:termType rr:IRI ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:nodeKind ;
+        rr:objectMap [ rml:reference "kind" ]
+    ] ;
+    # One range term whether R_p is a class or a datatype, as rdfs:range is one
+    # term for both; ckg:nodeKind already says which.  (Not rdfs:range itself:
+    # its RDFS entailment would type this node as an rdf:Property and intersect
+    # domains globally, whereas (D_p, p, R_p) scopes p locally.)
+    rr:predicateObjectMap [
+        rr:predicate ckg:range ;
+        rr:objectMap [ rr:template "{range}" ; rr:termType rr:IRI ]
+    ] .
+
+<#GraphHasNodeMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.nodes[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/graph/{gid}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:hasNode ;
+        rr:objectMap [ rr:template "{node_iri}" ; rr:termType rr:IRI ]
+    ] .
+
+
+# ------------------------------------------------------------------ #
+# The ordered column layout of `adj`.  The order is a property of *this*
+# graph, not of the globally shared node resources, so it hangs off a
+# per-graph slot rather than off the node.
+# ------------------------------------------------------------------ #
+<#NodeSlotMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.slots[*]"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://sdm-causalkg.org/graph/{gid}/slot/{index}" ;
+        rr:class ckg:NodeSlot
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:inGraph ;
+        rr:objectMap [ rr:template "{graph_iri}" ; rr:termType rr:IRI ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:slotIndex ;
+        rr:objectMap [ rml:reference "index" ; rr:datatype xsd:integer ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:slotNode ;
+        rr:objectMap [ rr:template "{node_iri}" ; rr:termType rr:IRI ]
+    ] .
+
+<#GraphHasNodeSlotMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.slots[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/graph/{gid}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:hasNodeSlot ;
+        rr:objectMap [ rr:template "{slot_iri}" ; rr:termType rr:IRI ]
+    ] .
+
+
+# ------------------------------------------------------------------ #
+# The reified causal edges
+# ------------------------------------------------------------------ #
+<#EdgeMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.edges[*]"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://sdm-causalkg.org/graph/{gid}/edge/{edge_key}" ;
+        rr:class ckg:CausalEdge
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:inGraph ;
+        rr:objectMap [ rr:template "{graph_iri}" ; rr:termType rr:IRI ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rml:reference "label" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:cause ;
+        rr:objectMap [ rr:template "{cause_iri}" ; rr:termType rr:IRI ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:effect ;
+        rr:objectMap [ rr:template "{effect_iri}" ; rr:termType rr:IRI ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:weight ;
+        rr:objectMap [ rml:reference "weight" ; rr:datatype xsd:double ]
+    ] ;
+    # Present only on an edge a human added during curation; `to_json` omits the
+    # key otherwise, so a discovered edge gets no triple at all rather than
+    # `false`.
+    rr:predicateObjectMap [
+        rr:predicate ckg:manuallyAdded ;
+        rr:objectMap [ rml:reference "manual" ; rr:datatype xsd:boolean ]
+    ] .
+
+<#GraphHasEdgeMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.edges[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/graph/{gid}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:hasEdge ;
+        rr:objectMap [ rr:template "{edge_iri}" ; rr:termType rr:IRI ]
+    ] .
+
+
+# ------------------------------------------------------------------ #
+# Relation labels.
+#
+# `ckg:viaRelation` lists every object property the edge's join traverses,
+# unordered — including the relations inside a multi-hop path — so "which edges
+# use this object property" is a one-triple-pattern query.
+#
+# `ckg:viaPath` carries the same label ordered and directed, as a single SPARQL
+# 1.1 property path (`^<a>/<b>`: `^` inverse, `/` sequence).  It is emitted only
+# when it adds something: never for `ckg:epsilon`, which has no direction, and
+# never for a plain forward single hop, which `ckg:viaRelation` already states.
+# ------------------------------------------------------------------ #
+<#EdgeRelationMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.edge_relations[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/graph/{gid}/edge/{edge_key}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:viaRelation ;
+        rr:objectMap [ rr:template "{relation}" ; rr:termType rr:IRI ]
+    ] .
+
+<#EdgeViaPathMap>
+    a rr:TriplesMap ;
+    rml:logicalSource [
+        rml:source "ocg.json" ;
+        rml:referenceFormulation ql:JSONPath ;
+        rml:iterator "$.edge_paths[*]"
+    ] ;
+    rr:subjectMap [ rr:template "http://sdm-causalkg.org/graph/{gid}/edge/{edge_key}" ] ;
+    rr:predicateObjectMap [
+        rr:predicate ckg:viaPath ;
+        rr:objectMap [ rml:reference "path" ]
+    ] .

@@ -1,0 +1,235 @@
+@prefix ckg: <http://sdm-causalkg.org/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/0_1> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.ageGroup --[ε]--> SCLCPatient.biomarker" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.ageGroup-02429de7> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/0_5> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.ageGroup --[ε]--> SCLCPatient.gender" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.ageGroup-02429de7> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.gender-f7a4b0f1> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/2_1> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.episodeType --[ε]--> SCLCPatient.biomarker" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.episodeType-45d49e73> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/2_8> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.episodeType --[ε]--> SCLCPatient.smokerType" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.episodeType-45d49e73> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/3_4> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.familyCancer --[ε]--> SCLCPatient.familyGender" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.familyCancer-6e85bf0b> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.familyGender-002d321e> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/4_5> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.familyGender --[ε]--> SCLCPatient.gender" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.familyGender-002d321e> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.gender-f7a4b0f1> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/6_4> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.locatedIn --[ε]--> SCLCPatient.familyGender" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.locatedIn-8f01bdc5> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.familyGender-002d321e> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/6_8> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.locatedIn --[ε]--> SCLCPatient.smokerType" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.locatedIn-8f01bdc5> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/6_9> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.locatedIn --[ε]--> SCLCPatient.stage" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.locatedIn-8f01bdc5> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.stage-edc9f824> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/7_9> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.relapseStatus --[ε]--> SCLCPatient.stage" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.relapseStatus-9c778739> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.stage-edc9f824> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/8_1> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.smokerType --[ε]--> SCLCPatient.biomarker" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/8_5> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.smokerType --[ε]--> SCLCPatient.gender" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.gender-f7a4b0f1> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/9_1> a ckg:CausalEdge ;
+    rdfs:label "SCLCPatient.stage --[ε]--> SCLCPatient.biomarker" ;
+    ckg:cause <http://sdm-causalkg.org/node/SCLCPatient.stage-edc9f824> ;
+    ckg:effect <http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409> ;
+    ckg:inGraph <http://sdm-causalkg.org/graph/PC-454b442f3fa6> ;
+    ckg:relationLabel "ε" ;
+    ckg:viaRelation ckg:epsilon ;
+    ckg:weight 1e+00 .
+
+<http://sdm-causalkg.org/run/PC-454b442f3fa6> a prov:Activity,
+        ckg:DiscoveryRun ;
+    rdfs:label "Causal discovery run: PC" ;
+    prov:endedAtTime "2026-09-02T08:50:08+00:00"^^xsd:dateTime ;
+    prov:used "/Users/jason/Documents/Coding Projects.nosync/2026_Claude/CausalKG_api/kgs/ttls/SCLC_patients.ttl" ;
+    ckg:method "PC" ;
+    ckg:sourceKG "/Users/jason/Documents/Coding Projects.nosync/2026_Claude/CausalKG_api/kgs/ttls/SCLC_patients.ttl" ;
+    ckg:usedTopologicalConstraint true .
+
+<http://sdm-causalkg.org/node/SCLCPatient.familyCancer-6e85bf0b> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.familyCancer" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/familyCancer> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.relapseStatus-9c778739> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.relapseStatus" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/relapseStatus> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.ageGroup-02429de7> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.ageGroup" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/ageGroup> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.episodeType-45d49e73> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.episodeType" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/episodeType> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.familyGender-002d321e> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.familyGender" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/familyGender> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.gender-f7a4b0f1> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.gender" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/gender> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.locatedIn-8f01bdc5> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.locatedIn" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/locatedIn> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.stage-edc9f824> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.stage" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/stage> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.biomarker" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/biomarker> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3> a ckg:PropertyNode ;
+    rdfs:label "SCLCPatient.smokerType" ;
+    ckg:domainClass <http://causalkg.example.org/sclc/SCLCPatient> ;
+    ckg:nodeKind "data" ;
+    ckg:property <http://causalkg.example.org/sclc/smokerType> ;
+    ckg:rangeDatatype xsd:string .
+
+<http://sdm-causalkg.org/graph/PC-454b442f3fa6> a prov:Entity,
+        ckg:OntologicalCausalGraph ;
+    rdfs:label "Ontological causal graph (PC)" ;
+    prov:wasGeneratedBy <http://sdm-causalkg.org/run/PC-454b442f3fa6> ;
+    ckg:constrained true ;
+    ckg:edgeCount 13 ;
+    ckg:hasEdge <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/0_1>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/0_5>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/2_1>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/2_8>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/3_4>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/4_5>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/6_4>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/6_8>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/6_9>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/7_9>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/8_1>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/8_5>,
+        <http://sdm-causalkg.org/graph/PC-454b442f3fa6/edge/9_1> ;
+    ckg:hasNode <http://sdm-causalkg.org/node/SCLCPatient.ageGroup-02429de7>,
+        <http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409>,
+        <http://sdm-causalkg.org/node/SCLCPatient.episodeType-45d49e73>,
+        <http://sdm-causalkg.org/node/SCLCPatient.familyCancer-6e85bf0b>,
+        <http://sdm-causalkg.org/node/SCLCPatient.familyGender-002d321e>,
+        <http://sdm-causalkg.org/node/SCLCPatient.gender-f7a4b0f1>,
+        <http://sdm-causalkg.org/node/SCLCPatient.locatedIn-8f01bdc5>,
+        <http://sdm-causalkg.org/node/SCLCPatient.relapseStatus-9c778739>,
+        <http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3>,
+        <http://sdm-causalkg.org/node/SCLCPatient.stage-edc9f824> ;
+    ckg:method "PC" ;
+    ckg:nodeCount 10 ;
+    ckg:nodeList ( <http://sdm-causalkg.org/node/SCLCPatient.ageGroup-02429de7> <http://sdm-causalkg.org/node/SCLCPatient.biomarker-97c6c409> <http://sdm-causalkg.org/node/SCLCPatient.episodeType-45d49e73> <http://sdm-causalkg.org/node/SCLCPatient.familyCancer-6e85bf0b> <http://sdm-causalkg.org/node/SCLCPatient.familyGender-002d321e> <http://sdm-causalkg.org/node/SCLCPatient.gender-f7a4b0f1> <http://sdm-causalkg.org/node/SCLCPatient.locatedIn-8f01bdc5> <http://sdm-causalkg.org/node/SCLCPatient.relapseStatus-9c778739> <http://sdm-causalkg.org/node/SCLCPatient.smokerType-80f6dde3> <http://sdm-causalkg.org/node/SCLCPatient.stage-edc9f824> ) .
+

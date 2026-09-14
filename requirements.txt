@@ -1,0 +1,53 @@
+# CausalKG — Python dependencies (Python 3.11)
+#
+# Lower bounds, not exact pins: the versions below are the floors the code is
+# written against. The environment the project is developed and tested in is
+# listed in README.md ("Verified environment") if you need to reproduce it
+# exactly.
+#
+#   pip install -r requirements.txt
+#
+# There is no `pip install -e .` — every executable entry point puts the
+# repository root on sys.path itself, so run commands from the repo root.
+
+# ------------------------------------------------ knowledge-graph side ------
+rdflib>=7.0                 # TTL/NT parsing, in-memory SPARQL over the KG
+SPARQLWrapper>=2.0          # remote SPARQL endpoints as a source
+rdfizer>=4.7                # SDM-RDFizer; run as a subprocess for RML export
+numpy>=1.26
+pandas>=2.2                 # 3.x is fine: no is_categorical_dtype anywhere
+scipy>=1.11
+networkx>=3.2
+scikit-learn>=1.4
+
+# ------------------------------------------ causal discovery (algs/) --------
+gcastle>=1.0.4              # PC, GES, NOTEARS, LiNGAM wrappers
+torch>=2.2                  # DAG-GNN, and gcastle's gradient-based methods
+dagma>=1.1
+tqdm>=4.66
+
+# --------------------------------- causal models and inference (Plan 2) -----
+dowhy>=0.12                 # dowhy.gcm — the structural causal model path
+pgmpy>=1.0                  # DiscreteBayesianNetwork — the exact-inference path
+statsmodels>=0.14
+joblib>=1.3
+
+# ---------------------------------------- LLM priors for GES-Prior ----------
+# Keys are read from the *server's* environment (algs/.env). The web UI never
+# has an API-key field.
+openai>=1.40                # OpenAI-compatible providers, incl. DeepSeek/Kimi/GLM
+anthropic>=0.40
+python-dotenv>=1.0
+
+# ------------------------------------------------ web service (Plan 3) ------
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.6
+python-multipart>=0.0.9     # multipart upload of an RDF file / priors JSON
+
+# --------------------------------------------------- notebooks, plotting ----
+matplotlib>=3.8             # causalkg/plotting.py — notebooks only
+jupyter>=1.0
+
+# ----------------------------------------------------------------- tests ----
+pytest>=8.0

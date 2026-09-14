@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------- secrets --
+# algs/.env holds the LLM keys the GES-Prior estimator reads. It is *never*
+# committed and never exposed to the browser — see algs/.env.example.
+.env
+
+# ----------------------------------------------------------------- python --
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --------------------------------------------------------------- frontend --
+node_modules/
+# Built bundle. uvicorn serves it, so a deployment needs it — but it is a
+# build artefact: `npm --prefix web run build` regenerates it from web/src.
+web/dist/
+web/tsconfig.tsbuildinfo
+
+# ------------------------------------------------- generated / regenerable --
+# Fitted models (scm.pkl + manifest.json). Large, binary, and reproducible
+# from the notebooks or the web service.
+results/models/
+results.bak-*/
+# SDM-RDFizer output; regenerate with kgs/command.sh.
+kgs/output/
+*.log
+
+# --------------------------------------------------------------------- os --
+.DS_Store
+Thumbs.db
+
+# ------------------------------------------- local working notes (private) --
+# Design specs and the running session log live alongside the code but are not
+# part of the published project.
+CLAUDE.md
+context.md
+continue_prompt.md
+DEMANDs.md
+Plan1 (causal discovery).md
+Plan2 (causal model & prediction).md
+Plan3 (web service).md
+.claude/
+architecture/
+archives/

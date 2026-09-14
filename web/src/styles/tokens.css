@@ -1,0 +1,225 @@
+@import 'tailwindcss';
+@import '@xyflow/react/dist/style.css';
+
+/* Dark mode is a class on <html>, set before first paint in index.html. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ *
+ * The semantic palette (Plan 3 §11). Every colour here carries meaning:
+ *   teal   = class / entity          amber  = literal (string, date)
+ *   sky    = numeric literal         indigo = causal / selected
+ *   green  = valid / observed        orange = conflict / intervened
+ *   red    = invalid / unstable
+ * Each has a value per scheme, chosen to hold both its meaning and its
+ * contrast in light and dark — the palette's whole job is to be read.
+ * ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+  --ck-bg: #eef1f5;
+  --ck-surface: #ffffff;
+  --ck-surface-2: #f4f6f9;
+  --ck-surface-3: #e9edf3;
+  --ck-line: #d8dee8;
+  --ck-line-soft: #e6eaf1;
+  --ck-text: #0d1219;
+  --ck-muted: #5d6779;
+  --ck-faint: #8b95a7;
+  --ck-teal: #0d9488;
+  --ck-amber: #b45309;
+  --ck-sky: #0369a1;
+  --ck-indigo: #4f46e5;
+  --ck-green: #047857;
+  --ck-orange: #c2410c;
+  --ck-red: #be123c;
+  --ck-shadow: 0 1px 2px rgb(13 18 25 / 0.06), 0 8px 24px -12px rgb(13 18 25 / 0.18);
+  --ck-grid: #ccd4e0;
+}
+
+.dark {
+  color-scheme: dark;
+  --ck-bg: #080a10;
+  --ck-surface: #10141d;
+  --ck-surface-2: #171c27;
+  --ck-surface-3: #1e2532;
+  --ck-line: #262e3d;
+  --ck-line-soft: #1c2330;
+  --ck-text: #e7eaf1;
+  --ck-muted: #8f99ad;
+  --ck-faint: #6b7488;
+  --ck-teal: #2dd4bf;
+  --ck-amber: #f5b942;
+  --ck-sky: #38bdf8;
+  --ck-indigo: #8b93f8;
+  --ck-green: #34d399;
+  --ck-orange: #fb923c;
+  --ck-red: #f87171;
+  --ck-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.8);
+  --ck-grid: #232b39;
+}
+
+@theme inline {
+  --color-bg: var(--ck-bg);
+  --color-surface: var(--ck-surface);
+  --color-surface2: var(--ck-surface-2);
+  --color-surface3: var(--ck-surface-3);
+  --color-line: var(--ck-line);
+  --color-linesoft: var(--ck-line-soft);
+  --color-ink: var(--ck-text);
+  --color-muted: var(--ck-muted);
+  --color-faint: var(--ck-faint);
+  --color-teal: var(--ck-teal);
+  --color-amber: var(--ck-amber);
+  --color-sky: var(--ck-sky);
+  --color-indigo: var(--ck-indigo);
+  --color-green: var(--ck-green);
+  --color-orange: var(--ck-orange);
+  --color-red: var(--ck-red);
+
+  --font-sans: ui-sans-serif, -apple-system, 'Segoe UI', Inter, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--ck-bg);
+    color: var(--ck-text);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* One transition for the theme swap, so light ⇄ dark reads as a dimmer,
+     not a page replacement. Excluded from anything that animates on its own. */
+  body,
+  .themed {
+    transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;
+  }
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ck-line);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ck-faint);
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ck-indigo);
+    outline-offset: 1px;
+    border-radius: 4px;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * React Flow, themed. The library ships light-mode defaults; these bind
+ * it to the token set so the canvas is part of the app, not a widget on
+ * top of it.
+ * ------------------------------------------------------------------ */
+.react-flow {
+  --xy-background-color: transparent;
+  --xy-edge-stroke-default: var(--ck-faint);
+  --xy-edge-stroke-selected-default: var(--ck-indigo);
+  --xy-attribution-background-color: transparent;
+}
+.react-flow__attribution {
+  display: none;
+}
+.react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  min-height: 1px;
+  border: 0;
+}
+.react-flow__controls-button {
+  background: var(--ck-surface);
+  border-bottom: 1px solid var(--ck-line);
+  fill: var(--ck-muted);
+}
+.react-flow__controls-button:hover {
+  background: var(--ck-surface-3);
+}
+.react-flow__controls {
+  box-shadow: var(--ck-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ck-line);
+}
+.react-flow__node {
+  cursor: grab;
+}
+.react-flow__node:active {
+  cursor: grabbing;
+}
+.react-flow__edge-path {
+  transition: stroke-width 140ms ease, opacity 140ms ease;
+}
+.react-flow__minimap {
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-line);
+  border-radius: 8px;
+}
+
+@keyframes ck-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ck-enter {
+  animation: ck-fade-up 180ms ease-out both;
+}
+
+@keyframes ck-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ck-spin {
+  animation: ck-spin 700ms linear infinite;
+}
+
+/* An indeterminate bar, for the one job whose remaining work genuinely cannot be
+   measured: rdflib gives no row count until the join is finished (W21). Showing a
+   fake percentage would be a claim about progress rather than a report of it. */
+@keyframes ck-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(280%);
+  }
+}
+.ck-indeterminate {
+  animation: ck-slide 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-indeterminate,
+  .ck-spin {
+    animation-duration: 3s;
+  }
+  .ck-enter {
+    animation: none;
+  }
+}
